@@ -1,6 +1,54 @@
 #include <iostream>
 #include <string>
+#include <fstream>
 #include "console.hpp"
+
+void saveStudentsToFile(Student students[], int num_students) {
+    std::ofstream outFile("students_backup.txt");
+
+    if (!outFile) {
+        std::cerr << "Error opening file for saving!" << std::endl;
+        return;
+    }
+
+    // Loop through students and write their data to the file
+    for (int i = 0; i < num_students; ++i) {
+        outFile << students[i].getID() << " "
+                << students[i].getGrades() << " "
+                << students[i].getYear() << " "
+                << students[i].getName() << "\n";
+    }
+
+    outFile.close(); // Close the file
+    std::cout << "\033[1;32mStudents have been successfully saved to the file!\033[0m\n";
+}
+
+void loadStudentsFromFile(Student students[], int &num_students) {
+    std::ifstream inFile("students_backup.txt");
+
+    if (!inFile) {
+        std::cerr << "Error opening file for loading!" << std::endl;
+        return;
+    }
+
+    num_students = 0;
+
+    // Read students' data from the file and populate the array
+    int id, year;
+    float Grades;
+    std::string name;
+
+    while (inFile >> id >> Grades >> year) {
+        std::getline(inFile, name); // Skip the newline character after Grades
+        name = name.substr(1); // To remove any leading space after getline
+
+        // Create a new Student object and store it in the array
+        students[num_students++] = Student(name, id, year, Grades);
+    }
+
+    inFile.close(); // Close the file
+    std::cout << "\033[1;32mStudents have been successfully loaded from the file!\033[0m\n";
+}
 
 int main() {
     const int MAX_STUDENTS = 1000;
@@ -8,6 +56,9 @@ int main() {
     int num_students = 0;
     int choice;
     bool valid_input;
+
+    // Load students from file at the start of the program
+    loadStudentsFromFile(students, num_students);
 
     do {
         std::cout << "\n\033[36m========================================\033[0m\n";
@@ -19,9 +70,11 @@ int main() {
         std::cout << " 4. Display All Students\n";
         std::cout << " 5. Search Student by ID\n";
         std::cout << " 6. Sort Students by ID\n";
-        std::cout << " 7. Sort Students by GPA\n";
+        std::cout << " 7. Sort Students by Grades\n";
         std::cout << " 8. Sort Students by Year of Enrollment\n";
-        std::cout << " 9. Exit\033[0m\n";
+        std::cout << " 9. Save Students to File\n";
+        std::cout << " 10. Load Students from File\n";
+        std::cout << " 11. Exit\033[0m\n";
         std::cout << "\033[36m========================================\033[0m\n";
         std::cout << "\033[34mEnter your choice: \033[0m";
 
@@ -31,7 +84,7 @@ int main() {
             std::cin >> choice;
 
             if (std::cin.fail()) {
-                std::cin.clear(); // clear the error flag
+                std::cin.clear(); // Clear the error flag
                 std::cout << "\033[1;31mInvalid input. Please enter a valid number.\033[0m\n";
                 std::cout << "\033[34mEnter your choice: \033[0m";
             } else {
@@ -67,21 +120,29 @@ int main() {
                 sortStudentsByID(students, num_students);  // Sort students by ID function
                 break;
             case 7:
-                std::cout << "\033[1;36m--- Sorting students by GPA ---\033[0m\n";
-                sortStudentsByGPA(students, num_students);  // Sort students by GPA function
+                std::cout << "\033[1;36m--- Sorting students by Grades ---\033[0m\n";
+                sortStudentsByGrades(students, num_students);  // Sort students by Grades function
                 break;
             case 8:
                 std::cout << "\033[1;36m--- Sorting students by Year of Enrollment ---\033[0m\n";
                 sortStudentsByYear(students, num_students);  // Sort students by year of enrollment function
                 break;
             case 9:
+                std::cout << "\033[1;32m--- Saving students to file ---\033[0m\n";
+                saveStudentsToFile(students, num_students);  // Save students to file function
+                break;
+            case 10:
+                std::cout << "\033[1;32m--- Loading students from file ---\033[0m\n";
+                loadStudentsFromFile(students, num_students);  // Load students from file function
+                break;
+            case 11:
                 std::cout << "\033[1;32mExiting the program. Goodbye!\033[0m\n";
                 break;
             default:
                 std::cout << "\033[1;31mInvalid choice. Please try again.\033[0m\n";
         }
 
-    } while (choice != 9);
+    } while (choice != 11);
 
     return 0;
 }

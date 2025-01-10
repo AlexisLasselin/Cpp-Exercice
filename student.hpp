@@ -9,21 +9,20 @@ private:
     std::string name;
     int ID;
     int year_of_enrollment;
-    float GPA;
-    std::string major;
+    float Grades;
 
     // Static data member to track the number of students
     static int student_count;
 
 public:
     // Default constructor
-    Student() : name(""), ID(0), year_of_enrollment(0), GPA(0.0), major("") {
+    Student() : name(""), ID(0), year_of_enrollment(0), Grades(0.0) {
         student_count++;  // Increment count when a student is created
     }
 
     // Parameterized constructor
-    Student(std::string n, int id, int year, float gpa, std::string m)
-        : name(n), ID(id), year_of_enrollment(year), GPA(gpa), major(m) {
+    Student(std::string n, int id, int year, float Grades)
+        : name(n), ID(id), year_of_enrollment(year), Grades(Grades) {
         student_count++;  // Increment count when a student is created
     }
 
@@ -39,15 +38,16 @@ public:
 
     // Getters
     int getID() const { return ID; }
-    float getGPA() const { return GPA; }
+    float getGrades() const { return Grades; }
 	int getYear() const { return year_of_enrollment; }
+    std::string getName() const { return name; }
 
     // Setters
-    void setGPA(float gpa) { GPA = gpa; }
+    void setGrades(float Grades) { Grades = Grades; }
 
     // Display function
     void display() const {
-        std::cout << "Name: " << name << ", ID: " << ID << ", Year of Enrollment: " << year_of_enrollment << ", GPA: " << GPA << ", Major: " << major << std::endl;
+        std::cout << "Name: " << name << ", ID: " << ID << ", Year of Enrollment: " << year_of_enrollment << ", Grades: " << Grades << std::endl;
     }
 };
 

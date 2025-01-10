@@ -1,6 +1,6 @@
 # C++ exercise - George's Class - January 2025
 
-## Given the following rules:
+## Given the following rules
 
 ```text
 Here follows a short description of our in-class exercise, to be reviewed on Monday 13/1:
